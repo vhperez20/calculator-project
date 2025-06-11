@@ -1,4 +1,5 @@
 import tkinter as tk
+import math
 
 def click(btn):
     current = entry.get()
@@ -12,6 +13,22 @@ def click(btn):
             entry.insert(0, "Error")
     elif btn == "C":
         entry.delete(0, tk.END)
+    #TRIG FUNCTIONS
+    elif btn in ("sin", "cos", "tan"):
+        try:
+            # Convert to radians and apply the trig function
+            value = float(current)
+            if btn == "sin":
+                result = math.sin(math.radians(value))
+            elif btn == "cos":
+                result = math.cos(math.radians(value))
+            elif btn == "tan":
+                result = math.tan(math.radians(value))
+            entry.delete(0, tk.END)
+            entry.insert(0, str(result))
+        except:
+            entry.delete(0, tk.END)
+            entry.insert(0, "Error")
     else:
         entry.insert(tk.END, btn)
 
@@ -36,8 +53,19 @@ buttons = [
 row = 1
 col = 0
 for b in buttons:
+    #STANDARD BUTTONS
     tk.Button(root, text=b, width=5, height=2, font=("Arial", 18),
               command=lambda x=b: click(x)).grid(row=row, column=col, padx=5, pady=5)
+    #TRIG BUTTONS
+    tk.Button(root, text='sin', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('sin')).grid(row=5, column=0)
+
+    tk.Button(root, text='cos', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('cos')).grid(row=5, column=1)
+
+    tk.Button(root, text='tan', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('tan')).grid(row=5, column=2)
+
     col += 1
     if col > 3:
         col = 0
