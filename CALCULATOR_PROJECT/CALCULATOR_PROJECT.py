@@ -5,10 +5,14 @@ def click(btn):
     current = entry.get()
     if btn == "=":
         try:
-            result = str(eval(current))
+            if "!" in current:
+                number = int(current.replace("!",""))
+                result = math.factorial(number)
+            else:
+                result = eval(current.replace("^","**"))
             entry.delete(0, tk.END)
-            entry.insert(0, result)
-        except:
+            entry.insert(0, str(result))
+        except:                         # HANDLE ANY ERRORS IN EVALUATION, CLEAR THE ENTRY AND SHOW "ERROR"
             entry.delete(0, tk.END)
             entry.insert(0, "Error")
     elif btn == "C":
@@ -16,7 +20,7 @@ def click(btn):
     #TRIG FUNCTIONS
     elif btn in ("sin", "cos", "tan"):
         try:
-            # Convert to radians and apply the trig function
+            # CONVERT TO RADIANS AND APPLY THE TRIG FUNCTION
             value = float(current)
             if btn == "sin":
                 result = math.sin(math.radians(value))
@@ -29,7 +33,7 @@ def click(btn):
         except:
             entry.delete(0, tk.END)
             entry.insert(0, "Error")
-    #Additional Functions
+    #ADDITIONAL FUNCTIONS
     elif btn  == "sqrt":
         try:
             value = float(current)
@@ -38,8 +42,7 @@ def click(btn):
             entry.insert(0, str(result))
         except:
             entry.delete(0, tk.END)
-            entry.insert(0, "Error")
-    
+            entry.insert(0, "Error") 
     elif btn == "log":
         try:
             value = float(current)
@@ -49,20 +52,40 @@ def click(btn):
         except:
             entry.delete(0, tk.END)
             entry.insert(0, "Error")
-    #
+    #CONSTANTS AND FACTORIALS
+    elif btn == "!":
+        try:
+            entry.insert(tk.END, "!")
+        except:
+            entry.delete(0, tk.END)
+            entry.insert(0, "Error")
+
+    elif btn == "pi":
+        entry.insert(tk.END, str(math.pi))
+    elif btn == "e":
+        entry.insert(tk.END, str(math.e))
+
     else:
         entry.insert(tk.END, btn)
 
-# Create main window
+#ENTER HANDLER
+def handle_enter(event):
+    click("=")
+
+
+# CREATE MAIN WINDOW
 root = tk.Tk()
 root.title("Calculator")
 root.resizable(False, False)
 
-# Entry widget (display)
+# ENTRY WIDGET (DISPLAY)
 entry = tk.Entry(root, width=25, font=("Arial", 18), bd=5, justify="right")
 entry.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
 
-# Button labels
+# BIND ENTER KEY
+entry.bind("<Return>",  lambda event: click("=")) 
+
+# BUTTON LABELS
 buttons = [
     '7', '8', '9', '/',
     '4', '5', '6', '*',
@@ -70,7 +93,7 @@ buttons = [
     '0', 'C', '=', '+'
 ]
 
-# Create and place buttons in grid
+# CREATE AND PLACE BUTTONS IN GRID
 row = 1
 col = 0
 for b in buttons:
@@ -89,12 +112,21 @@ for b in buttons:
     #ADDITIONAL BUTTONS
     tk.Button(root, text = 'sqrt', width=5, height=2, font=("Arial", 18),
               command=lambda: click('sqrt')).grid(row=5, column=3)
+    tk.Button(root, text = '^', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('**')).grid(row=6, column=1)
+    #CONSTANTS & FACTORIALS
+    tk.Button(root, text='pi', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('pi')).grid(row=6, column=0)
+    tk.Button(root, text='e', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('e')).grid(row=6, column=2)
+    tk.Button(root, text='!', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('!')).grid(row=6, column=3)
 
     col += 1
     if col > 3:
         col = 0
         row += 1
 
-# Start the GUI loop
+# START THE GUI LOOP
 root.mainloop()
 
