@@ -29,6 +29,27 @@ def click(btn):
         except:
             entry.delete(0, tk.END)
             entry.insert(0, "Error")
+    #Additional Functions
+    elif btn  == "sqrt":
+        try:
+            value = float(current)
+            result = math.sqrt(value)
+            entry.delete(0, tk.END)
+            entry.insert(0, str(result))
+        except:
+            entry.delete(0, tk.END)
+            entry.insert(0, "Error")
+    
+    elif btn == "log":
+        try:
+            value = float(current)
+            result = math.log10(value)
+            entry.delete(0, tk.END)
+            entry.insert(0, str(result))
+        except:
+            entry.delete(0, tk.END)
+            entry.insert(0, "Error")
+    #
     else:
         entry.insert(tk.END, btn)
 
@@ -65,6 +86,9 @@ for b in buttons:
 
     tk.Button(root, text='tan', width=5, height=2, font=("Arial", 18),
               command=lambda: click('tan')).grid(row=5, column=2)
+    #ADDITIONAL BUTTONS
+    tk.Button(root, text = 'sqrt', width=5, height=2, font=("Arial", 18),
+              command=lambda: click('sqrt')).grid(row=5, column=3)
 
     col += 1
     if col > 3:
